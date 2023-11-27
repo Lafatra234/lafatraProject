@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un évènement{% endblock %}
+
+{% block body %}
+    <h2>Mes évènements</h2>
+    <h4>Mes évènements en attente</h4>
+            {% include "_partials/_event_waiting_user.html.twig" %}
+{% endblock %}

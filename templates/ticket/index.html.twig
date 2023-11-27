@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TicketController!{% endblock %}
+
+{% block body %}
+<section class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1>Créer vos billets</h1>
+        </div>
+        <div class="col-6">
+                {{ form_start(ticketForm) }}
+                {{ form_row(ticketForm.ticketType) }}
+                {{ form_row(ticketForm.price) }}
+                {{ form_row(ticketForm.ticket_limit) }}
+                <button type="submit" class="btn btn-lg btn-primary">Créer</button>
+                <a href="{{ path('organisateur_place') }}" class="btn btn-lg btn-warning">Terminé</a>
+            {{ form_end(ticketForm) }}
+        </div>
+        <div class="col-6">
+            <h3>Mes billets</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Type de billet</th>
+                        <th>Prix</th>
+                        <th>Limite</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in tickets %}
+                        {% if ticket == null %}
+                            <h5>Aucun ticket existant</h5>
+                            {% else %}
+                                <tr>
+                                    <td>{{ ticket.ticketType }}</td>
+                                    <td>{{ ticket.price }}</td>
+                                    <td>{{ ticket.ticketLimit }}</td>
+                                </tr>                      
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endblock %}

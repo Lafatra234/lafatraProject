@@ -1,0 +1,89 @@
+<main class="container">
+    <section class="row">
+        <div class="col-12">
+            <h1>Détails sur {{ one_event.eventName }}</h1>
+        </div>
+        <div class="col-6">
+            Image
+        </div>
+        <div class="col-6">
+            <p>{{ one_event.description }}</p>
+            <p>Du: {{ formatBegin|date('d F Y', null, 'fr') }} à {{ formatBegin|date('H:i:s') }}</p>
+            <p>Au: {{ formatEnd|date('d F Y', null, 'fr') }} à {{ formatEnd|date('H:i:s') }}</p>
+            <p>Lieu: {{ one_event.place }}</p>
+            <p>Organisateur: {{ one_event.organizer.lastname }} {{ one_event.organizer.firstname }}</p>
+            <div class="d-flex flex-row">
+                <div class="ml-30"><p>Temps:</p></div>
+                <div id="timer"></div>
+            </div>
+            {% for ticket in tickets %}
+                <div class="mx-auto">
+                    <h5>{{ ticket.ticketType }} MGA {{ ticket.price }}</h5>    
+                    <button class="decrement-button">-</button>            
+                    <input type="number" class="number-input w-25" value="0" min="0" max="20" id="numberInput_{{ ticket.id }}">
+                    <button class="increment-button">+</button>
+                    <a href="{{ path('app_cart', {'event_id': one_event.id ,'id': ticket.id, 'number': '__NUM__'}) }}" class="btn btn-lg btn-primary" id="addToCart_{{ ticket.id }}">Ajouter</a>
+                </div>     
+            {% endfor %}
+        </div>
+            <script>
+                // Set your target end date and time (YYYY-MM-DD HH:MM:SS format)
+                const endDate = new Date('{{formatBegin|date('Y-m-d H:i:s')}}').getTime();
+
+                function updateTimer() {
+                const now = new Date().getTime();
+                const timeRemaining = endDate - now;
+
+                if (timeRemaining <= 0) {
+                    document.getElementById('timer').innerHTML = "Timer expired!";
+                } else {
+                    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+                    const timerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                    document.getElementById('timer').innerHTML = timerText;
+                }
+                }
+
+                // Update the timer every second
+                setInterval(updateTimer, 1000);
+                updateTimer(); // Call the function immediately to show the initial timer
+
+                document.addEventListener("DOMContentLoaded", function() {
+                const incrementButtons = document.querySelectorAll(".increment-button");
+                const decrementButtons = document.querySelectorAll(".decrement-button");
+
+                incrementButtons.forEach(function(incrementButton) {
+                    incrementButton.addEventListener("click", function() {
+                    const input = incrementButton.previousElementSibling;
+                    const currentValue = parseInt(input.value, 10);
+                    if (currentValue < 20) {
+                        input.value = (currentValue + 1).toString();
+                    }
+                    });
+                });
+
+                decrementButtons.forEach(function(decrementButton) {
+                    decrementButton.addEventListener("click", function() {
+                    const input = decrementButton.nextElementSibling;
+                    const currentValue = parseInt(input.value, 10);
+                    if (currentValue > 0) {
+                        input.value = (currentValue - 1).toString();
+                    }
+                    });
+                });
+                });
+                {% for ticket in tickets %}
+                    document.getElementById('addToCart_{{ ticket.id }}').addEventListener('click', function() {
+                        // Get the element by its ID
+                        var element = document.getElementById('numberInput_{{ ticket.id }}');
+                        var number = document.getElementById('numberInput_{{ ticket.id }}').value;
+                        var link = document.getElementById('addToCart_{{ ticket.id }}');
+                        link.href = link.href.replace('__NUM__', number);
+                    });
+                {% endfor %}
+            </script>
+    </section>
+</main>

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un évènement{% endblock %}
+
+{% block body %}
+    {% if app.user %}
+        <div>{{ render(controller('App\\Controller\\CartController::show', { 'eventId': one_event.id })) }}</div>
+        <style>
+            .contenu{
+                margin-top: -640px;
+            }
+        </style>
+    {% endif %} 
+    <div class="contenu">{% include "_partials/_one_event_details.html.twig" %}</div>
+{% endblock %}

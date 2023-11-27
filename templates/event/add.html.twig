@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un évènement{% endblock %}
+
+{% block body %}
+    <section class="container my-3">
+        <div class="row">
+            <div class="col">
+                <h1>Créer votre Evènement</h1>
+                {% include "event/_form.html.twig" %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

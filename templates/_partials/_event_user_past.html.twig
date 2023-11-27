@@ -1,0 +1,25 @@
+<div class="container mt-3">
+    <nav class="nav nav-tabs">
+        <a href="{{ path('My_Event_detail') }}" class="nav-item nav-link" data-toggle="tab">En cours</a>
+        <a href="{{ path('my_past_event') }}" class="nav-item nav-link active" data-toggle="tab">Terminés</a>
+        <a href="{{ path('my_waiting_event') }}" class="nav-item nav-link" data-toggle="tab">En attente</a> 
+    </nav>            
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Nom Evènement</th>
+        <th>Statut</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for event in events %}
+      {% if event.statutEvent == 'Terminé' %}
+        <tr>
+          <td>{{ event.eventName }}</td>
+          <td>{{ event.statutEvent }}</td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+    </tbody>
+  </table>
+</div>

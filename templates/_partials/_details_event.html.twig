@@ -1,0 +1,21 @@
+<section class="container">
+  <div class="row">
+    <div class="col d-flex flex-row">
+      {% for event in events %}
+        {% if event.statutEvent == 'En cours' %}
+          <div class="card ml-lg" style="width:400px">
+              <img class="card-img-top" src="{{ asset('assets/uploads/' ~ event.reference ~ '/mini/300x300-' ~ event.reference ~ '.webp') }}" alt="Card image">
+              <div class="card-body">
+                <h4 class="card-title">{{ event.eventName }}</h4>
+                <p class="card-text">{{ event.description }}</p>
+              </div>
+              <div class="card-footer d-flex justify-content-between">
+                <a href="{{ path('event_detail', { "id": event.id })  }}" class="btn btn-primary">Voir plus de détails</a>
+              </div>
+          </div>    
+          {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+

@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un évènement{% endblock %}
+
+{% block body %}
+    <main class="container">
+        <section class="row">
+            <div class="col-12">
+                <h1>Détails sur {{ event.eventName }}</h1>
+            </div>
+            <div class="col-6">
+                Image
+            </div>
+            <div class="col-6">
+                <p>{{ event.description }}</p>
+                <p>Du: {{ beginDate|date('d F Y', null, 'fr') }} à {{ beginDate|date('H:i:s') }}</p>
+                <p>Au: {{ endDate|date('d F Y', null, 'fr') }} à {{ endDate|date('H:i:s') }}</p>
+                <p>Lieu: {{ event.place }}</p>
+                <p>Organisateur: {{ event.organizer.lastname }} {{ event.organizer.firstname }}</p>
+                <div class="d-flex flex-row">
+                    <div class="ml-30"><p>Temps:</p></div>
+                    <div id="timer"></div>
+                </div>
+                <p>Statut: {{ event.statutEvent }}</p>
+                <p>Les billets proposés: </p>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Type de ticket</th>
+                                <th>Prix</th>
+                                <th>Limite</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ticket in tickets %}
+                                <tr>
+                                    <td>{{ ticket.ticketType }}</td>
+                                    <td>{{ ticket.price }}</td>
+                                    <td>{{ ticket.ticketLimit }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                <script>
+                    // Set your target end date and time (YYYY-MM-DD HH:MM:SS format)
+                    const endDate = new Date('{{beginDate|date('Y-m-d H:i:s')}}').getTime();
+
+                    function updateTimer() {
+                    const now = new Date().getTime();
+                    const timeRemaining = endDate - now;
+
+                    if (timeRemaining <= 0) {
+                        document.getElementById('timer').innerHTML = "Timer expired!";
+                    } else {
+                        const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+                        const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+                        const timerText = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                        document.getElementById('timer').innerHTML = timerText;
+                    }
+                    }
+
+                    // Update the timer every second
+                    setInterval(updateTimer, 1000);
+                    updateTimer(); // Call the function immediately to show the initial timer
+
+                </script>
+                {% if event.statutEvent == 'En attente' %}
+                    <div class="d-flex flex-row">
+                        <a href="{{ path('event_approved', {"id": event.id}) }}" class="btn btn-lg btn-primary">Approuvé</a>
+                        <a href="{{ path('event_desapproved', {"id": event.id}) }}" class="btn btn-lg btn-danger ml-6">Desapprouvé</a>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+    </main> 
+{% endblock %}

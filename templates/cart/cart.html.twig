@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un évènement{% endblock %}
+
+{% block body %}
+    <div class="cart">
+        <h1>Panier</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Evènement</th>
+                        <th>Type ticket</th>
+                        <th>Prix</th>
+                        <th>Quantité</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% if data is empty %}
+                    <tr>
+                        <td colspan="6">Votre panier est vide</td>
+                    </tr>
+                {% else %}
+                    {% for item in data %}
+                        <tr>
+                            <td>{{ item.event }}</td>
+                            <td>{{ item.ticketType }}</td>
+                            <td>{{ item.price }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.totalPrice }}</td>
+                            <td>
+                                <a href="{{ path('add_ticket', {id: item.id}) }}" class="btn btn-success">+</a>
+                                <a href="{{ path('remove_ticket', {id: item.id}) }}" class="btn btn-warning">-</a>
+                                <a href="{{ path('delete_ticket', {id: item.id}) }}" class="btn btn-danger">Supprimer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5">Total: {{ total }}</td>
+                        <td>
+                            <a href="{{ path('empty_cart') }}" class="btn btn-danger">Vider</a>
+                            <a href="{{ path('app_purchase') }}" class="btn btn-primary">Payer</a>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            {% endif %}
+{% endblock %}

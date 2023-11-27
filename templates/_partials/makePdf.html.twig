@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Concert Ticket</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+            .ticket {
+                max-width: 400px;
+                margin: 50px auto;
+                padding: 20px;
+                border: 2px solid #333;
+                border-radius: 10px;
+                text-align: center;
+            }
+            .qr-code {
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="ticket">
+            <h2>Ticket pour l'évènement suivant</h2>
+            <p>Evènement: {{ event.eventName }}</p>
+            <p>Du: {{ formatBegin|date('d F Y', null, 'fr') }} à {{ formatBegin|date('H:i:s') }}</p>
+            <p>Au: {{ formatEnd|date('d F Y', null, 'fr') }} à {{ formatEnd|date('H:i:s') }}</p>
+            <p>Place: {{ event.place }}</p>
+            <div class="qr-code">
+                <img src="{{ simple }}" alt="">
+            </div>
+        </div>
+    </body>
+</html>

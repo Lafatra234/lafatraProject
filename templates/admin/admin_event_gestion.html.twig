@@ -1,0 +1,64 @@
+<h1>Gérer les évènements</h1>
+<section class="container">
+  <h3>Les évènements en attente</h3>
+  <div class="row">
+    <div class="col d-flex flex-row">
+      {% for event in events %}
+        {% if event.statutEvent == 'En attente' %}
+            <div class="card ml-lg" style="width:400px">
+                <img class="card-img-top" src="" alt="Card image">
+                <div class="card-body">
+                    <h4 class="card-title">{{ event.eventName }}</h4>
+                    <p class="card-text">{{ event.description }}</p>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <a href="{{ path('event_info', { "id": event.id })  }}" class="btn btn-primary">Voir plus de détails</a>
+                </div>
+            </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<section class="container">
+  <h3>Les évènements en cours</h3>
+  <div class="row">
+    <div class="col d-flex flex-row">
+      {% for event in events %}
+        {% if event.statutEvent == 'En cours' %}
+            <div class="card ml-lg" style="width:400px">
+                <img class="card-img-top" src="" alt="Card image">
+                <div class="card-body">
+                    <h4 class="card-title">{{ event.eventName }}</h4>
+                    <p class="card-text">{{ event.description }}</p>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <a href="{{ path('event_info', { "id": event.id })  }}" class="btn btn-primary">Voir plus de détails</a>
+                </div>
+            </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<section class="container">
+  <h3>Les évènements terminés</h3>
+  <div class="row">
+    <div class="col d-flex flex-row">
+      {% for event in events %}
+        {% if event.statutEvent == 'Terminé' %}
+            <div class="card ml-lg" style="width:400px">
+                <img class="card-img-top" src="" alt="Card image">
+                <div class="card-body">
+                    <h4 class="card-title">{{ event.eventName }}</h4>
+                    <p class="card-text">{{ event.description }}</p>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <a href="{{ path('event_info', { "id": event.id })  }}" class="btn btn-primary">Voir plus de détails</a>
+                </div>
+            </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un évènement{% endblock %}
+
+{% block body %}
+    <h1>Bienvenue dans l'espace Organisateur</h1>
+    <a href="{{ path('app_event') }}" class="btn btn-lg btn-primary">Créer votre évènement</a>
+    <div class="container mt-3">
+        <div class="card">
+            <div class="card-body">Mes évènements: <b>{{ number }}</b>
+                <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+                    <a class="carousel-control-next-icon bg-black" href="{{ path('My_Event_detail') }}"></a>
+                </button>
+            </div>
+        </div>
+     </div> 
+{% endblock %}
