@@ -20,6 +20,7 @@ class PdfService
         $pdfOptions->set('defaultFont', 'Garamond');
         
         $pdfOptions->set('isHtml5ParserEnabled', true);
+        $pdfOptions->set('isPhpEnabled', true);
 
         $this->dompdf->setOptions($pdfOptions);
     }
@@ -37,9 +38,18 @@ class PdfService
 
     public function generateBinaryPdf($html, $name)
     {
-        $this->dompdf->loadHtml($html);
-        $this->dompdf->render();
-        $output = $this->dompdf->output();
+        $domp = new Dompdf();
+        $options = new Options();
+
+        $options->set('defaultFont', 'Garamond');
+        
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isPhpEnabled', true);
+
+        $domp->setOptions($options);
+        $domp->loadHtml($html);
+        $domp->render();
+        $output = $domp->output();
 
         $path = $this->params->get('pdf_directory');
         $pdfFilepath =  $path . $name . '.pdf';

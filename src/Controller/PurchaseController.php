@@ -56,15 +56,15 @@ class PurchaseController extends AbstractController
                 $html = $this->renderView('_partials/makePdf.html.twig', compact('formatBegin', 'simple', 'formatEnd', 'event'));
                 $user = $this->getUser();
                 $userAct = $userRepository->find($user);
-                $pdfName = 'Billet_pour_'. $event->getEventName(). $ticket->getTicketType() . $i;
+                $pdfName = 'Billet_pour_'. $event->getEventName() . '_' . $ticket->getTicketType(). '_' . $i;
                 $pdf->generateBinaryPdf($html, $pdfName);
-                // $mail->send(
-                //     'no-reply@epurchase.net',
-                //     $userAct->getEmail(),
-                //     'Tester mon envoi de mail',
-                //     $pdfName . '.pdf'
-                // );
-                // $pdf->deletePdf($pdfName);
+                $mail->send(
+                    'no-reply@epurchase.net',
+                    $userAct->getEmail(),
+                    'Tester mon envoi de mail',
+                    $pdfName . '.pdf'
+                );
+                $pdf->deletePdf($pdfName);
                 $em->persist($purchase);
                 $em->flush();
             }
@@ -117,9 +117,7 @@ class PurchaseController extends AbstractController
     #[Route('/achat/success', name: 'payment_success')]
     public function StripeSuccess(EventRepository $eventRepository, SessionInterface $session): Response
     {
-        $events = $eventRepository->findAll();
-        $session->remove('panier');
-        return $this->render('purchase/success.html.twig', compact('events'));
+        return new RedirectResponse('app_purchase');
     }
 
     #[Route('/achat/failed', name: 'payment_failed')]
@@ -127,19 +125,5 @@ class PurchaseController extends AbstractController
     {
         $events = $eventRepository->findAll();
         return $this->render('purchase/failed.html.twig', compact('events'));
-    }
-
-    #[Route('/test', name: 'test')]
-    public function test(PdfService $pdf, QrCodeService $qrCodeService): Response
-    {
-        for($i = 0; $i < 2; $i++){
-            $qrCode = $qrCodeService->makeQr(md5(uniqid()));
-            $simple = $qrCode['simple'];
-            $html = $this->renderView('test/test.html.twig', compact('simple'));
-            dump($simple);
-            $pdf->generateBinaryPdf($html, $i);
-        }
-        die();
-        return new Response('Succès');
     }
 }
