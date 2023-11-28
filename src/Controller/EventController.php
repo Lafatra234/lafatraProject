@@ -76,7 +76,7 @@ class EventController extends AbstractController
         return $this->render('event/event_detail.html.twig', compact('one_event','formatBegin','formatEnd', 'tickets'));
     }
 
-    #[Route('/Mes_évènement', name: 'My_Event_detail')]
+    #[Route('/mes_évènement', name: 'My_Event_detail')]
     public function myEvent(EventRepository $eventRepository, TicketRepository $ticketRepository, PurchaseRepository $purchaseRepository, EntityManagerInterface $em): Response
     {
         $user = $this->getUser();

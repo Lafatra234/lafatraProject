@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Stripe\Stripe;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,13 +21,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class PurchaseController extends AbstractController
 {
-    #[Route('/purchase', name: 'app_purchase')]
+    #[Route('/achat', name: 'app_purchase')]
     public function purchas(SessionInterface $session, TicketRepository $ticketRepository, 
     EntityManagerInterface $em, EventRepository $eventRepository, PdfService $pdf, 
-    QrCodeService $qrCodeService, MailerService $mail, UserRepository $userRepository)
+    QrCodeService $qrCodeService, MailerService $mail, UserRepository $userRepository, Request $request)
     {
-        
-
         $panier = $session->get('panier', []);
         $number = 0;
 
@@ -69,9 +68,8 @@ class PurchaseController extends AbstractController
                 $em->flush();
             }
         }
-
-        return new Response('Succès');
-
+        $session->remove('panier');
+        return $this->redirectToRoute('main');
     }
 
     #[Route('/achat/create-session-stripe', name: 'stripe_payment')]
@@ -107,23 +105,16 @@ class PurchaseController extends AbstractController
                 $ticketStripe
         ]],
         'mode' => 'payment',
-        'success_url' => $generator->generate('payment_success', [], UrlGeneratorInterface::ABSOLUTE_URL),
+        'success_url' => $generator->generate('app_purchase', [], UrlGeneratorInterface::ABSOLUTE_URL),
         'cancel_url' => $generator->generate('payment_failed', [], UrlGeneratorInterface::ABSOLUTE_URL),
         ]);
 
         return new RedirectResponse($checkout_session->url);
     }
 
-    #[Route('/achat/success', name: 'payment_success')]
-    public function StripeSuccess(EventRepository $eventRepository, SessionInterface $session): Response
-    {
-        return new RedirectResponse('app_purchase');
-    }
-
     #[Route('/achat/failed', name: 'payment_failed')]
-    public function StripeFailed(EventRepository $eventRepository): Response
+    public function StripeFailed(): Response
     {
-        $events = $eventRepository->findAll();
-        return $this->render('purchase/failed.html.twig', compact('events'));
+        return $this->redirectToRoute('main');
     }
 }

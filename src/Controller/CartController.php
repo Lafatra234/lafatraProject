@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Ticket;
-use App\Form\NumberFormType;
 use App\Repository\EventRepository;
 use App\Repository\TicketRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,7 +15,8 @@ class CartController extends AbstractController
 {
 
     #[Route('/panier/{eventId}', name: 'cart')]
-    public function show(SessionInterface $session, TicketRepository $ticketRepository, EventRepository $eventRepository, Request $request, int $eventId): Response
+    public function show(SessionInterface $session, TicketRepository $ticketRepository, 
+    EventRepository $eventRepository, Request $request, int $eventId): Response
     {
         $panier = $session->get('panier', []);
         
